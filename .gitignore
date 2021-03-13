@@ -11,6 +11,10 @@
 *.gch
 *.pch
 
+# Other VS files
+.vs\*
+*.suo
+
 # Compiled Dynamic libraries
 *.so
 *.dylib
@@ -30,3 +34,6 @@
 *.exe
 *.out
 *.app
+
+# complied monogame files
+*.xnb

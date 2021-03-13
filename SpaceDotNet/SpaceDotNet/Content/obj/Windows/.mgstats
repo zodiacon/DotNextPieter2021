@@ -1,0 +1,22 @@
+Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Audio/Music.mp3","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Audio/Music.xnb","SongProcessor","SongContent",2725127,123,3.6736798
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Backgrounds/BG.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Backgrounds/BG.xnb","TextureProcessor","Texture2DContent",517800,8294485,0.9554376
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Fonts/default.spritefont","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Fonts/default.xnb","FontDescriptionProcessor","SpriteFontContent",2005,21538,0.5524715
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Asteroid1.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/Asteroid1.xnb","TextureProcessor","Texture2DContent",2511,16621,0.5150517
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Asteroid2.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/Asteroid2.xnb","TextureProcessor","Texture2DContent",3889,27909,0.0079419
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Asteroid3.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/Asteroid3.xnb","TextureProcessor","Texture2DContent",3844,30169,0.4898451
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/burner.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/burner.xnb","TextureProcessor","Texture2DContent",34291,121921,0.4811524
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/CSharp1.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/CSharp1.xnb","TextureProcessor","Texture2DContent",59069,147285,0.0141848
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/CSharp2.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/CSharp2.xnb","TextureProcessor","Texture2DContent",13934,262229,0.0188468
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/dotnetcore.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/dotnetcore.xnb","TextureProcessor","Texture2DContent",13838,262229,0.0163632
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Enemies/exhaust1.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/Enemies/exhaust1.xnb","TextureProcessor","Texture2DContent",250,16469,0.5408856
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Enemies/exhaust2.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/Enemies/exhaust2.xnb","TextureProcessor","Texture2DContent",301,16469,0.008412
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Enemies/exhaust3.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/Enemies/exhaust3.xnb","TextureProcessor","Texture2DContent",301,16469,0.4504264
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Enemies/Ship1.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/Enemies/Ship1.xnb","TextureProcessor","Texture2DContent",2223,65621,0.0091254
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Enemies/Ship2.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/Enemies/Ship2.xnb","TextureProcessor","Texture2DContent",2086,65621,0.0158983
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Enemies/Ship3.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/Enemies/Ship3.xnb","TextureProcessor","Texture2DContent",3309,65621,0.0101259
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/explosion.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/explosion.xnb","TextureProcessor","Texture2DContent",111927,1024689,0.3286257
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/missile.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/missile.xnb","TextureProcessor","Texture2DContent",39380,115893,0.4965151
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/missile2.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/missile2.xnb","TextureProcessor","Texture2DContent",43764,115893,0.4676448
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/missile-explode.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/missile-explode.xnb","TextureProcessor","Texture2DContent",107584,944869,0.4984039
+"C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/player.png","C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/bin/Windows/Sprites/player.xnb","TextureProcessor","Texture2DContent",56903,228845,0.0190948

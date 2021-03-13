@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Audio/Music.mp3</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Backgrounds/BG.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Fonts/default.spritefont</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Asteroid1.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Asteroid2.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Asteroid3.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/burner.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/CSharp1.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/CSharp2.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/dotnetcore.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Enemies/exhaust1.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Enemies/exhaust2.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Enemies/exhaust3.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Enemies/Ship1.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Enemies/Ship2.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/Enemies/Ship3.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/explosion.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/missile.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/missile2.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/missile-explode.png</File>
+    <File>C:/Dev/Temp/SpaceDotNet/SpaceDotNet/Content/Sprites/player.png</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>

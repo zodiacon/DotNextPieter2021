@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31025.218
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceDotNet.Desktop", "SpaceDotNet.Desktop\SpaceDotNet.Desktop.csproj", "{74601066-A9A9-44BF-855C-3A7248858457}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SpaceDotNet", "SpaceDotNet\SpaceDotNet.shproj", "{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		SpaceDotNet\SpaceDotNet.projitems*{74601066-a9a9-44bf-855c-3a7248858457}*SharedItemsImports = 5
+		SpaceDotNet\SpaceDotNet.projitems*{a0cdbd0e-3a41-42b7-9425-a838bc2c7383}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{74601066-A9A9-44BF-855C-3A7248858457}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74601066-A9A9-44BF-855C-3A7248858457}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74601066-A9A9-44BF-855C-3A7248858457}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74601066-A9A9-44BF-855C-3A7248858457}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {12808626-7AB4-4488-B042-A8E5F870BFB5}
+	EndGlobalSection
+EndGlobal
