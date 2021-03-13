@@ -4,6 +4,7 @@ using SpaceDotNet.Objects;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace SpaceDotNet.Components {
@@ -12,12 +13,13 @@ namespace SpaceDotNet.Components {
         MarchRight,
         MarchLeft,
         Drop,
-        Halt
+        Halt,
+        Dead
     }
 
     class Enemies : DrawableGameComponent {
         public Enemies(Game game) : base(game) {
-
+            _game = (SpaceDotNetGame)game;
         }
 
         protected override void LoadContent() {
@@ -42,7 +44,7 @@ namespace SpaceDotNet.Components {
                     ship.GotoState(_state, data.StartSpeed);
                     _matrix[row, col] = ship;
                     _ships.Add(ship);
-                }
+                } 
             }
             _currentSpeed = data.StartSpeed;
             _alive = data.NumColumns * data.NumRows;
@@ -65,7 +67,7 @@ namespace SpaceDotNet.Components {
                         case EnemyState.MarchRight:
                             if (ship.GetPosition().X > _targetX) {
                                 newState = EnemyState.Drop;
-                                speed = 50;
+                                speed = 70;
                                 _targetY = ship.GetPosition().Y + 40;
                                 _leadShip = ship;
                             }
@@ -73,7 +75,6 @@ namespace SpaceDotNet.Components {
 
                         case EnemyState.Drop:
                             if (_leadShip.GetPosition().Y > _targetY) {
-                                speed = _currentSpeed;
                                 if (_prevState == EnemyState.MarchRight) {
                                     newState = EnemyState.MarchLeft;
                                     _targetX = -100;
@@ -82,13 +83,15 @@ namespace SpaceDotNet.Components {
                                     newState = EnemyState.MarchRight;
                                     _targetX = Game.Window.ClientBounds.Width + 100;
                                 }
+                                _currentSpeed += 5;
+                                speed = _currentSpeed;
                             }
                             break;
                             
                         case EnemyState.MarchLeft:
                             if (ship.GetPosition().X < _targetX) {
                                 newState = EnemyState.Drop;
-                                speed = 50;
+                                speed = 70;
                                 _targetY = ship.GetPosition().Y + 40;
                                 _leadShip = ship;
                             }
@@ -104,6 +107,15 @@ namespace SpaceDotNet.Components {
             }
         }
 
+        public Enemy IsHit(Sprite other) {
+            return _ships.FirstOrDefault(s => s.IsAlive && s.Ship.IsCollision(other));
+        }
+
+        public void EnemyDead(Enemy enemy) {
+            if (--_alive == 0)
+                _game.NextLevel();
+        }
+
         SpriteBatch _sb;
         readonly List<Enemy> _ships = new List<Enemy>(32);
         EnemyState _state, _prevState;
@@ -112,5 +124,7 @@ namespace SpaceDotNet.Components {
         float _targetX, _targetY;
         float _currentSpeed;
         int _alive;
+        SpaceDotNetGame _game;
+
     }
 }

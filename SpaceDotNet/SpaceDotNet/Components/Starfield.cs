@@ -76,7 +76,7 @@ namespace SpaceDotNet.Components {
             }
 
             if (_player.State == PlayerState.Alive) {
-                if (_asteroids.Count < 3 && _rnd.Next(100) < 2) {
+                if (_asteroids.Count < _maxAsteroids && _rnd.Next(100) < 2) {
                     var ast = new Asteroid(_asteroidTextures[_rnd.Next(_asteroidTextures.Count)]);
                     _asteroids.Add(ast);
                 }
@@ -89,6 +89,10 @@ namespace SpaceDotNet.Components {
                     i--;
                 }
             }
+        }
+
+        internal void InitLevel(int level) {
+            _maxAsteroids = Levels.Data[level - 1].MaxAsteroids;
         }
 
         internal void RemoveAsteroid(Asteroid ast) {
@@ -107,5 +111,6 @@ namespace SpaceDotNet.Components {
 
         int _width, _height;
         Player _player;
+        int _maxAsteroids;
     }
 }

@@ -5,11 +5,15 @@ using System;
 
 namespace SpaceDotNet.Objects {
     class Enemy {
+        public EnemyData Data { get; }
+        public Sprite Ship => _ship;
+
         public Enemy(Game game, int index) {
-            _data = Enemies.Data[index];
+            Data = Enemies.Data[index];
 
             _ship.InitTexture(Enemies.LoadShipTexture(game, index));
             _exhaust.InitTexture(Enemies.LoadExhaustTexture(game, index), 4);
+            _hitPoints = Data.Power;
         }
 
         public bool IsAlive { get; private set; } = true;
@@ -33,13 +37,23 @@ namespace SpaceDotNet.Objects {
         }
 
         public virtual void Draw(GameTime gt, SpriteBatch sb) {
-            _ship.Draw(sb);
-            _exhaust.Draw(sb);
+            if (IsAlive) {
+                _ship.Draw(sb);
+                _exhaust.Draw(sb);
+            }
         }
 
         public virtual void Update(GameTime gt) {
-            _ship.Update(gt);
-            _exhaust.Update(gt);
+            if (IsAlive) {
+                _ship.Update(gt);
+                _exhaust.Update(gt);
+            }
+        }
+
+        public void Hit(int hp) {
+            if ((_hitPoints -= hp) < 0) {
+                IsAlive = false;
+            }
         }
 
         public void GotoState(EnemyState state, float speed) {
@@ -67,9 +81,9 @@ namespace SpaceDotNet.Objects {
             };
         }
 
-        EnemyData _data;
         EnemyState _state = EnemyState.None;
         Sprite _ship = new Sprite() { Scale = .8f };
         Sprite _exhaust = new Sprite() { Scale = 1 };
+        int _hitPoints;
     }
 }

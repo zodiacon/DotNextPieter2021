@@ -7,12 +7,18 @@ using System;
 using System.Diagnostics;
 
 namespace SpaceDotNet {
+    enum GameState {
+        Running,
+        Title,
+        Over
+    }
+
     public class SpaceDotNetGame : Game {
         public static SpaceDotNetGame Instance;
         public readonly Random Random = new Random();
         public readonly int Width = 1080;
         public readonly int Height = 800;
-        public int Level { get; private set; } = 4;
+        public int Level { get; private set; } = 6;
         public GameTime GameTime => _gameTime;
 
         internal Starfield StarField { get; private set; }
@@ -59,7 +65,7 @@ namespace SpaceDotNet {
             MediaPlayer.Volume = .5f;
             MediaPlayer.Play(_music);
 
-            Enemies.InitLevel(Level);
+            InitLevel(Level);
 
             base.LoadContent();
         }
@@ -119,15 +125,31 @@ namespace SpaceDotNet {
             return null;
         }
 
+        public void NextLevel() {
+            InitLevel(++Level);
+        }
+
         void DrawStats(SpriteBatch sb) {
             sb.DrawString(_defaultFont, $"Level: {Level}", new Vector2(20, 20), Color.Cyan);
-            sb.DrawString(_defaultFont, $"Score: {Player.Score}", new Vector2(100, 20), Color.Yellow);
-            sb.DrawString(_defaultFont, $"Ships: {Player.Lives}", new Vector2(250, 20), Color.Magenta);
+            sb.DrawString(_defaultFont, $"Score: {Player.Score}", new Vector2(120, 20), Color.Yellow);
+            sb.DrawString(_defaultFont, $"Ships: {Player.Lives}", new Vector2(270, 20), Color.Magenta);
+            if (_state == GameState.Over) {
+                sb.DrawString(_defaultFont, "GAME OVER", new Vector2(210, 300), Color.Red, 0, new Vector2(0, 0), 5, SpriteEffects.None, 0);
+                sb.DrawString(_defaultFont, "GAME OVER", new Vector2(216, 306), Color.LightBlue, 0, new Vector2(0, 0), 5, SpriteEffects.None, 0);
+            }
         }
 
         void InitLevel(int level) {
             Debug.Assert(level > 0);
+            _levelData = Levels.Data[Level - 1];
+            Enemies.InitLevel(Level);
+            StarField.InitLevel(Level);
+        }
 
+        public void GameOver() {
+            Enemies.Visible = false;
+            Player.Visible = false;
+            _state = GameState.Over;
         }
 
         GraphicsDeviceManager _graphics;
@@ -136,10 +158,12 @@ namespace SpaceDotNet {
         Texture2D _explosionTexture;
         int _bgPos;
         TimeSpan _lastTime;
-        Sprite[] _explostions = new Sprite[16];
+        Sprite[] _explostions = new Sprite[24];
         int _lastExplosion = -1;
         GameTime _gameTime;
         SpriteFont _defaultFont;
+        LevelData _levelData;
         Song _music;
+        GameState _state = GameState.Running;
     }
 }

@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SpaceDotNet.Objects;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
+using System.Runtime.CompilerServices;
 
 namespace SpaceDotNet.Components {
     public enum PlayerState {
@@ -14,18 +14,18 @@ namespace SpaceDotNet.Components {
     }
 
     class Player : DrawableGameComponent {
-        public float MissilesPerSecond = 1;
+        public float MissilesPerSecond = 3;
         public int Score { get; private set; }
-        public int Lives { get; private set; } = 3;
+        public int Lives { get; private set; } = 1;
 
         public PlayerState State { get; private set; } = PlayerState.Alive;
 
         public Player(Game game) : base(game) {
+            _game = (SpaceDotNetGame)game;
         }
 
         public override void Initialize() {
             _sb = new SpriteBatch(Game.GraphicsDevice);
-           
             base.Initialize();
         }
 
@@ -113,7 +113,6 @@ namespace SpaceDotNet.Components {
                     break;
             }
 
-
             foreach (var m in _missiles) {
                 if (m.State != SpriteState.Visible)
                     continue;
@@ -125,6 +124,10 @@ namespace SpaceDotNet.Components {
                         break;
                     }
                 }
+                var enemy = _game.Enemies.IsHit(m);
+                if (enemy != null) {
+                    EnemyHit(m, enemy);
+                }
                 m.Update(gameTime);
                 if (m.Position.Y < -m.TextureHeight)
                     m.State = SpriteState.Hidden;
@@ -133,8 +136,34 @@ namespace SpaceDotNet.Components {
             base.Update(gameTime);
         }
 
+        private void EnemyHit(Sprite missile, Enemy enemy) {
+            // remove missile
+            missile.State = SpriteState.Hidden;
+
+            enemy.Hit(_game.Random.Next(10) + 5);
+            if (enemy.IsAlive) {
+                ExplodeMissile(missile);
+                Score += 5;
+            }
+            else {
+                ExplodeEnemy(enemy);
+                Score += enemy.Data.Score;
+                _game.Enemies.EnemyDead(enemy);
+            }
+        }
+
+        private void ExplodeEnemy(Enemy enemy) {
+            var exp = _game.GetFreeExplostion();
+            exp.Position = enemy.Ship.Position;
+            enemy.GotoState(EnemyState.Dead, 0);
+            exp.HideOnAnimationEnd = true;
+            exp.State = SpriteState.Visible;
+            exp.AnimationFPS = 12;
+            exp.ScaleTo(enemy.Ship.Width, true);
+        }
+
         private void ExplodePlayer(GameTime gt) {
-            var exp = SpaceDotNetGame.Instance.GetFreeExplostion();
+            var exp = _game.GetFreeExplostion();
             exp.Position = _sprite.Position;
             exp.HideOnAnimationEnd = true;
             exp.AnimationFPS = 12;
@@ -142,9 +171,14 @@ namespace SpaceDotNet.Components {
             exp.State = SpriteState.Visible;
             _sprite.State = SpriteState.Hidden;
             _burner.State = SpriteState.Hidden;
-            State = PlayerState.Respawn;
-            _respawnTime = gt.TotalGameTime + TimeSpan.FromSeconds(5);
-            Lives--;
+            if (--Lives > 0) {
+                State = PlayerState.Respawn;
+                _respawnTime = gt.TotalGameTime + TimeSpan.FromSeconds(5);
+            }
+            else {
+                State = PlayerState.Dead;
+                _game.GameOver();
+            }
         }
 
         private void ExplodeMissile(Sprite missile) {
@@ -170,13 +204,14 @@ namespace SpaceDotNet.Components {
 
         Sprite _sprite;
         Sprite _burner;
-        float _missileSpeed = 500;
-        Sprite[] _missiles = new Sprite[16];
+        float _missileSpeed = 600;
+        Sprite[] _missiles = new Sprite[8];
         SpriteBatch _sb;
         TimeSpan _lastMissileShot;
         Texture2D _missleExplodeTexture;
         int _lastMissile = -1;
-        float _playerSpeed = 200;
+        float _playerSpeed = 250;
         TimeSpan _respawnTime;
+        SpaceDotNetGame _game;
     }
 }
