@@ -18,7 +18,7 @@ namespace SpaceDotNet {
         public readonly Random Random = new Random();
         public readonly int Width = 1080;
         public readonly int Height = 800;
-        public int Level { get; private set; } = 6;
+        public int Level { get; private set; } = 3;
         public GameTime GameTime => _gameTime;
 
         internal Starfield StarField { get; private set; }
@@ -49,6 +49,13 @@ namespace SpaceDotNet {
             for (int i = 0; i < _explostions.Length; i++)
                 _explostions[i] = new Sprite();
 
+            this.Deactivated += delegate {
+                Pause(true);
+            };
+            this.Activated += delegate {
+                Pause(false);
+            };
+
             base.Initialize();
         }
 
@@ -73,8 +80,12 @@ namespace SpaceDotNet {
         protected override void Update(GameTime gameTime) {
             _gameTime = gameTime;
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            var keyState = Keyboard.GetState();
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || keyState.IsKeyDown(Keys.Escape))
                 Exit();
+           
+            if (_pauseCount > 0)
+                return;
 
             if (gameTime.TotalGameTime - _lastTime > TimeSpan.FromMilliseconds(60)) {
                 _bgPos++;
@@ -139,6 +150,14 @@ namespace SpaceDotNet {
             }
         }
 
+        public void Pause(bool pause) {
+            _pauseCount += pause ? 1 : -1;
+            if (_pauseCount > 0)
+                MediaPlayer.Pause();
+            else
+                MediaPlayer.Resume();
+        }
+
         void InitLevel(int level) {
             Debug.Assert(level > 0);
             _levelData = Levels.Data[Level - 1];
@@ -150,6 +169,7 @@ namespace SpaceDotNet {
             Enemies.Visible = false;
             Player.Visible = false;
             _state = GameState.Over;
+            MediaPlayer.Volume = .1f;
         }
 
         GraphicsDeviceManager _graphics;
@@ -165,5 +185,6 @@ namespace SpaceDotNet {
         LevelData _levelData;
         Song _music;
         GameState _state = GameState.Running;
+        int _pauseCount = 0;
     }
 }

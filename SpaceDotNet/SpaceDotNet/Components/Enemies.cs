@@ -1,11 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SpaceDotNet.Objects;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 
 namespace SpaceDotNet.Components {
     enum EnemyState {
@@ -30,24 +28,31 @@ namespace SpaceDotNet.Components {
 
         public void InitLevel(int level) {
             Debug.Assert(level > 0);
-            var data = Levels.Data[level - 1];
+            _levelData = Levels.Data[level - 1];
+            _matrix = new Enemy[_levelData.NumRows, _levelData.NumColumns];
             _ships.Clear();
+            _alive = _levelData.NumColumns * _levelData.NumRows;
+            ResetEnemies();
+        }
+
+        public void ResetEnemies(bool fullReset = true) {
             float x = 100, y = 70;
             _state = EnemyState.MarchRight;
             _targetX = Game.Window.ClientBounds.Width + 100;
-            _matrix = new Enemy[data.NumRows, data.NumColumns];
+            var data = _levelData;
 
             for (int row = 0; row < data.NumRows; row++) {
                 for (int col = 0; col < data.NumColumns; col++) {
-                    var ship = new Enemy(Game, data.EnemiesInRows[row]);
+                    var ship = fullReset ? new Enemy(Game, data.EnemiesInRows[row]) : _matrix[row, col];
                     ship.SetPosition(new Vector2(x + col * 110, y + row * 60));
-                    ship.GotoState(_state, data.StartSpeed);
-                    _matrix[row, col] = ship;
-                    _ships.Add(ship);
-                } 
+                    ship.GotoState(_state, fullReset ? data.StartSpeed : _currentSpeed);
+                    if (fullReset) {
+                        _matrix[row, col] = ship;
+                        _ships.Add(ship);
+                    }
+                }
             }
             _currentSpeed = data.StartSpeed;
-            _alive = data.NumColumns * data.NumRows;
         }
 
         public override void Draw(GameTime gameTime) {
@@ -61,44 +66,51 @@ namespace SpaceDotNet.Components {
             var newState = _state;
             float speed = 0;
             foreach (var ship in _ships) {
-                if (ship.IsAlive) {
-                    ship.Update(gameTime);
-                    switch (_state) {
-                        case EnemyState.MarchRight:
-                            if (ship.GetPosition().X > _targetX) {
-                                newState = EnemyState.Drop;
-                                speed = 70;
-                                _targetY = ship.GetPosition().Y + 40;
-                                _leadShip = ship;
-                            }
-                            break;
+                if (!ship.IsAlive)
+                    continue;
 
-                        case EnemyState.Drop:
-                            if (_leadShip.GetPosition().Y > _targetY) {
-                                if (_prevState == EnemyState.MarchRight) {
-                                    newState = EnemyState.MarchLeft;
-                                    _targetX = -100;
-                                }
-                                else {
-                                    newState = EnemyState.MarchRight;
-                                    _targetX = Game.Window.ClientBounds.Width + 100;
-                                }
-                                _currentSpeed += 5;
-                                speed = _currentSpeed;
+                if (_game.Player.PlayerEnemyHit(ship)) {
+                    EnemyDead(ship);
+                    continue;
+                }
+
+                ship.Update(gameTime);
+                switch (_state) {
+                    case EnemyState.MarchRight:
+                        if (ship.GetPosition().X > _targetX) {
+                            newState = EnemyState.Drop;
+                            speed = 70;
+                            _targetY = ship.GetPosition().Y + 40;
+                            _leadShip = ship;
+                        }
+                        break;
+
+                    case EnemyState.Drop:
+                        if (_leadShip.GetPosition().Y > _targetY) {
+                            if (_prevState == EnemyState.MarchRight) {
+                                newState = EnemyState.MarchLeft;
+                                _targetX = -100;
                             }
-                            break;
-                            
-                        case EnemyState.MarchLeft:
-                            if (ship.GetPosition().X < _targetX) {
-                                newState = EnemyState.Drop;
-                                speed = 70;
-                                _targetY = ship.GetPosition().Y + 40;
-                                _leadShip = ship;
+                            else {
+                                newState = EnemyState.MarchRight;
+                                _targetX = Game.Window.ClientBounds.Width + 100;
                             }
-                            break;
-                    }
+                            _currentSpeed += 5;
+                            speed = _currentSpeed;
+                        }
+                        break;
+
+                    case EnemyState.MarchLeft:
+                        if (ship.GetPosition().X < _targetX) {
+                            newState = EnemyState.Drop;
+                            speed = 70;
+                            _targetY = ship.GetPosition().Y + 40;
+                            _leadShip = ship;
+                        }
+                        break;
                 }
             }
+
             if (newState != _state) {
                 _prevState = _state;
                 _state = newState;
@@ -125,6 +137,6 @@ namespace SpaceDotNet.Components {
         float _currentSpeed;
         int _alive;
         SpaceDotNetGame _game;
-
+        LevelData _levelData;
     }
 }

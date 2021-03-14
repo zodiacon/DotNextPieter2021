@@ -14,9 +14,9 @@ namespace SpaceDotNet.Components {
     }
 
     class Player : DrawableGameComponent {
-        public float MissilesPerSecond = 3;
+        public float MissilesPerSecond = 2;
         public int Score { get; private set; }
-        public int Lives { get; private set; } = 1;
+        public int Lives { get; private set; } = 3;
 
         public PlayerState State { get; private set; } = PlayerState.Alive;
 
@@ -53,6 +53,11 @@ namespace SpaceDotNet.Components {
             }
 
             _missleExplodeTexture = Game.Content.Load<Texture2D>("sprites/missile-explode");
+
+            _explosionTextures = new Texture2D[3];
+            for (int i = 0; i < _explosionTextures.Length; i++) {
+                _explosionTextures[i] = Game.Content.Load<Texture2D>($"sprites/enemies/explosion{i + 1}");
+            }
         }
 
         public override void Draw(GameTime gameTime) {
@@ -105,6 +110,9 @@ namespace SpaceDotNet.Components {
 
                 case PlayerState.Respawn:
                     if (_respawnTime < gameTime.TotalGameTime) {
+                        // reset enemies
+                        _game.Enemies.ResetEnemies(false);
+
                         // respawn player
                         _sprite.State = SpriteState.Visible;
                         _burner.State = SpriteState.Visible;
@@ -136,6 +144,16 @@ namespace SpaceDotNet.Components {
             base.Update(gameTime);
         }
 
+        public bool PlayerEnemyHit(Enemy enemy) {
+            if (_sprite.IsCollision(enemy.Ship)) {
+                // player hit, explode
+                ExplodePlayer(_game.GameTime);
+                ExplodeEnemy(enemy);
+                return true;
+            }
+            return false;
+        }
+
         private void EnemyHit(Sprite missile, Enemy enemy) {
             // remove missile
             missile.State = SpriteState.Hidden;
@@ -154,6 +172,7 @@ namespace SpaceDotNet.Components {
 
         private void ExplodeEnemy(Enemy enemy) {
             var exp = _game.GetFreeExplostion();
+            exp.InitTexture(_explosionTextures[_game.Random.Next(_explosionTextures.Length)], 8);
             exp.Position = enemy.Ship.Position;
             enemy.GotoState(EnemyState.Dead, 0);
             exp.HideOnAnimationEnd = true;
@@ -213,5 +232,6 @@ namespace SpaceDotNet.Components {
         float _playerSpeed = 250;
         TimeSpan _respawnTime;
         SpaceDotNetGame _game;
+        Texture2D[] _explosionTextures;
     }
 }

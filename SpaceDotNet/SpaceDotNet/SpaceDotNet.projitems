@@ -18,7 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)LevelData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Levels.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Objects\Asteroid.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Objects\Enemies.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Objects\EnemyData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Objects\Enemy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpaceDotNetGame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sprite.cs" />
