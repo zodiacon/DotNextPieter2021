@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace SpaceDotNet.Components {
-    sealed class Starfield : DrawableGameComponent {
+    sealed class StarfieldComponent : DrawableGameComponent {
         const int Stars = 100;
 
         class Star {
@@ -16,13 +16,13 @@ namespace SpaceDotNet.Components {
             public Color Tint;
         }
 
-        public Starfield(Game game) : base(game) {
+        public StarfieldComponent(Game game) : base(game) {
         }
 
         public override void Initialize() {
             base.Initialize();
 
-            _player = Game.Components.First(c => c.GetType() == typeof(Player)) as Player;
+            _player = Game.Components.First(c => c.GetType() == typeof(PlayerComponent)) as PlayerComponent;
         }
 
         protected override void LoadContent() {
@@ -110,7 +110,7 @@ namespace SpaceDotNet.Components {
         List<Asteroid> _asteroids = new List<Asteroid>(8);
 
         int _width, _height;
-        Player _player;
+        PlayerComponent _player;
         int _maxAsteroids;
     }
 }

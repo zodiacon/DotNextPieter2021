@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using SpaceDotNet.Components;
+using SpaceDotNet.Objects;
 using System;
 using System.Diagnostics;
 
@@ -18,12 +19,12 @@ namespace SpaceDotNet {
         public readonly Random Random = new Random();
         public readonly int Width = 1080;
         public readonly int Height = 800;
-        public int Level { get; private set; } = 3;
+        public int Level { get; private set; } = 1;
         public GameTime GameTime => _gameTime;
 
-        internal Starfield StarField { get; private set; }
-        internal Player Player { get; private set; }
-        internal Enemies Enemies { get; private set; }
+        internal StarfieldComponent StarField { get; private set; }
+        internal PlayerComponent Player { get; private set; }
+        internal EnemiesComponent Enemies { get; private set; }
 
         public SpaceDotNetGame() {
             Debug.Assert(Instance == null);
@@ -42,12 +43,15 @@ namespace SpaceDotNet {
             _graphics.ApplyChanges();
             Window.Title = "Space Dot Net";
 
-            Components.Add(StarField = new Starfield(this));
-            Components.Add(Player = new Player(this));
-            Components.Add(Enemies = new Enemies(this));
+            Components.Add(StarField = new StarfieldComponent(this));
+            Components.Add(Player = new PlayerComponent(this));
+            Components.Add(Enemies = new EnemiesComponent(this));
 
             for (int i = 0; i < _explostions.Length; i++)
                 _explostions[i] = new Sprite();
+
+            for (int i = 0; i < _powerups.Length; i++)
+                _powerups[i] = new Powerup();
 
             this.Deactivated += delegate {
                 Pause(true);
@@ -65,12 +69,21 @@ namespace SpaceDotNet {
             _background = Content.Load<Texture2D>("backgrounds/bg");
             _defaultFont = Content.Load<SpriteFont>("fonts/default");
             _explosionTexture = Content.Load<Texture2D>("sprites/explosion");
+
+            _powerUpsTextures = new Texture2D[] {
+                Content.Load<Texture2D>("sprites/objects/Csharp1"),
+                Content.Load<Texture2D>("sprites/objects/Csharp2"),
+                Content.Load<Texture2D>("sprites/objects/dotnetcore"),
+            };
+
             _music = Content.Load<Song>("audio/music");
 
             _bgPos = Random.Next(_background.Height);
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Volume = .5f;
             MediaPlayer.Play(_music);
+
+            Audio.LoadContent(this);
 
             InitLevel(Level);
 
@@ -97,7 +110,26 @@ namespace SpaceDotNet {
             foreach (var exp in _explostions)
                 exp.Update(gameTime);
 
+            foreach (var pu in _powerups) {
+                if (pu.State == SpriteState.Visible) {
+                    pu.Update(gameTime);
+                    if (Player.PlayerHit(pu)) {
+                        ApplyPowerup(pu);
+                    }
+                    else if (pu.Position.Y > Window.ClientBounds.Bottom + 50) {
+                        pu.State = SpriteState.Hidden;
+                        _activePowerups--;
+                    }
+                }
+            }
             base.Update(gameTime);
+        }
+
+        private void ApplyPowerup(Powerup pu) {
+            pu.State = SpriteState.Hidden;
+            _activePowerups--;
+            Audio.PlayPowerup();
+            Player.ApplyPowerup(pu.Type);
         }
 
         protected override void Draw(GameTime gameTime) {
@@ -110,6 +142,10 @@ namespace SpaceDotNet {
             _spriteBatch.Begin();
             foreach (var exp in _explostions)
                 exp.Draw(_spriteBatch);
+
+            foreach (var pu in _powerups)
+                pu.Draw(_spriteBatch);
+
             DrawStats(_spriteBatch);
             _spriteBatch.End();
 
@@ -173,12 +209,36 @@ namespace SpaceDotNet {
         }
 
         GraphicsDeviceManager _graphics;
+
+        internal Powerup CreatePowerup(Sprite ship) {
+            if (_activePowerups > 3)
+                // not too many powerups at the same time
+                return null;
+
+            var type = Random.Next(3);
+            int i = 0;
+            for (; i < _powerups.Length; i++)
+                if (_powerups[i].State == SpriteState.Hidden)
+                    break;
+
+            var pu = _powerups[i];
+            pu.Init(_powerUpsTextures[type], (PowerupType)type, Random.NextFloat() * 2 - 1);
+            pu.Position = ship.Position;
+            pu.Velocity = new Vector2(0, Random.NextFloat() * 150 + 100);
+            pu.State = SpriteState.Visible;
+            pu.ScaleTo(50);
+            _activePowerups++;
+            return pu;
+        }
+
         SpriteBatch _spriteBatch;
         Texture2D _background;
         Texture2D _explosionTexture;
         int _bgPos;
         TimeSpan _lastTime;
         Sprite[] _explostions = new Sprite[24];
+        Texture2D[] _powerUpsTextures;
+        Powerup[] _powerups = new Powerup[5];
         int _lastExplosion = -1;
         GameTime _gameTime;
         SpriteFont _defaultFont;
@@ -186,5 +246,6 @@ namespace SpaceDotNet {
         Song _music;
         GameState _state = GameState.Running;
         int _pauseCount = 0;
+        int _activePowerups;
     }
 }

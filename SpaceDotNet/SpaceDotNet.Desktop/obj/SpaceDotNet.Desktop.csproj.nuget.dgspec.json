@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Dev\\Temp\\SpaceDotNet\\SpaceDotNet.Desktop\\SpaceDotNet.Desktop.csproj": {}
+    "C:\\Dev\\DotNextPiter2021\\DotNextPiter2021\\SpaceDotNet\\SpaceDotNet.Desktop\\SpaceDotNet.Desktop.csproj": {}
   },
   "projects": {
-    "C:\\Dev\\Temp\\SpaceDotNet\\SpaceDotNet.Desktop\\SpaceDotNet.Desktop.csproj": {
+    "C:\\Dev\\DotNextPiter2021\\DotNextPiter2021\\SpaceDotNet\\SpaceDotNet.Desktop\\SpaceDotNet.Desktop.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Dev\\Temp\\SpaceDotNet\\SpaceDotNet.Desktop\\SpaceDotNet.Desktop.csproj",
+        "projectUniqueName": "C:\\Dev\\DotNextPiter2021\\DotNextPiter2021\\SpaceDotNet\\SpaceDotNet.Desktop\\SpaceDotNet.Desktop.csproj",
         "projectName": "SpaceDotNet.Desktop",
-        "projectPath": "C:\\Dev\\Temp\\SpaceDotNet\\SpaceDotNet.Desktop\\SpaceDotNet.Desktop.csproj",
+        "projectPath": "C:\\Dev\\DotNextPiter2021\\DotNextPiter2021\\SpaceDotNet\\SpaceDotNet.Desktop\\SpaceDotNet.Desktop.csproj",
         "packagesPath": "C:\\Users\\pavel\\.nuget\\packages\\",
-        "outputPath": "C:\\Dev\\Temp\\SpaceDotNet\\SpaceDotNet.Desktop\\obj\\",
+        "outputPath": "C:\\Dev\\DotNextPiter2021\\DotNextPiter2021\\SpaceDotNet\\SpaceDotNet.Desktop\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",

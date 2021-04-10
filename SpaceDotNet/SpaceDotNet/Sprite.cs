@@ -23,7 +23,7 @@ namespace SpaceDotNet {
         public int TextureHeight { get; private set; }
         public int TotalFrames { get; private set; }
         public bool HideOnAnimationEnd { get; set; }
-        public float BoundingBoxShrinkFactor = .1f;
+        public float BoundingBoxShrinkFactor = .2f;
 
         public Sprite(Texture2D texture, int frames = 1) {
             InitTexture(texture, frames);

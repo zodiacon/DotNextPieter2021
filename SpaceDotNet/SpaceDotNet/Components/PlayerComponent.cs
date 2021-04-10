@@ -13,14 +13,15 @@ namespace SpaceDotNet.Components {
         Dead
     }
 
-    class Player : DrawableGameComponent {
-        public float MissilesPerSecond = 2;
+    class PlayerComponent : DrawableGameComponent {
+        public float MissilesPerSecond = 2.3f;
         public int Score { get; private set; }
         public int Lives { get; private set; } = 3;
+        public bool IsShieldActive => _shieldActive;
 
         public PlayerState State { get; private set; } = PlayerState.Alive;
 
-        public Player(Game game) : base(game) {
+        public PlayerComponent(Game game) : base(game) {
             _game = (SpaceDotNetGame)game;
         }
 
@@ -35,6 +36,9 @@ namespace SpaceDotNet.Components {
                 Position = new Vector2(300, 700),
             };
             _sprite.ScaleTo(90);
+           
+            _shield = new Sprite(Game.Content.Load<Texture2D>("sprites/shield"));
+            _shield.ScaleTo(90);
 
             var burnerTexture = Game.Content.Load<Texture2D>("sprites/burner");
             _burner = new Sprite(burnerTexture, 10) {
@@ -66,6 +70,7 @@ namespace SpaceDotNet.Components {
                 m.Draw(_sb);
             _sprite.Draw(_sb);
             _burner.Draw(_sb);
+            _shield.Draw(_sb);
 
             _sb.End();
         }
@@ -94,6 +99,7 @@ namespace SpaceDotNet.Components {
                         _lastMissileShot = gameTime.TotalGameTime + TimeSpan.FromMilliseconds(1000 / MissilesPerSecond);
                         missile.State = SpriteState.Visible;
                         missile.Velocity.Y = -_missileSpeed;
+                        Audio.CreateBullet();
                     }
                     foreach (var ast in asteroids) {
                         if (ast.IsCollision(_sprite)) {
@@ -106,6 +112,25 @@ namespace SpaceDotNet.Components {
                     }
                     _sprite.Update(gameTime);
                     _burner.Update(gameTime);
+                    if (_shieldActive) {
+                        _shield.Position = _sprite.Position - new Vector2(0, 30);
+                        var alpha = (float)(gameTime.TotalGameTime.TotalMilliseconds / 10) % 100 / 100.0f;
+                        _shield.Tint = new Color(Color.White, alpha);
+                    }
+
+                    // update powerups
+
+                    if (_missileSpeedTargetTime != TimeSpan.Zero && _missileSpeedTargetTime < gameTime.TotalGameTime)
+                        MissilesPerSecond = 2.3f;
+
+                    if (_playerSpeedTargetTime != TimeSpan.Zero && _playerSpeedTargetTime < gameTime.TotalGameTime)
+                        _playerSpeed = 250;
+
+                    if (_shieldTargetTime != TimeSpan.Zero && _shieldTargetTime < gameTime.TotalGameTime) {
+                        _shieldActive = false;
+                        _shield.State = SpriteState.Hidden;
+                    }
+
                     break;
 
                 case PlayerState.Respawn:
@@ -129,6 +154,7 @@ namespace SpaceDotNet.Components {
                     if (ast.IsCollision(m)) {
                         // asteroid hit
                         ExplodeMissile(m);
+                        Audio.CreateExplosion(0);
                         break;
                     }
                 }
@@ -144,6 +170,38 @@ namespace SpaceDotNet.Components {
             base.Update(gameTime);
         }
 
+        internal void ApplyPowerup(PowerupType type) {
+            Score += 100 * _game.Level;
+
+            switch (type) {
+                case PowerupType.FasterFire:
+                    if ((MissilesPerSecond += 1) > 5.5f)
+                        _missileSpeed = 5.5f;
+                    _missileSpeedTargetTime = _game.GameTime.TotalGameTime + TimeSpan.FromSeconds(10);
+                    break;
+
+                case PowerupType.FasterMove:
+                    if ((_playerSpeed += 50) > 500)
+                        _playerSpeed = 500;
+                    _playerSpeedTargetTime = _game.GameTime.TotalGameTime + TimeSpan.FromSeconds(5);
+                    break;
+
+                case PowerupType.Shield:
+                    if (!_shieldActive) {
+                        _shieldActive = true;
+                        _shield.State = SpriteState.Visible;
+                    }
+                    _shieldTargetTime = _game.GameTime.TotalGameTime + TimeSpan.FromSeconds(10);
+                    break;
+            }
+        }
+
+        public bool PlayerHit(Sprite sprite) {
+            return _sprite.IsCollision(sprite);
+        }
+
+        public bool IsAlive => State == PlayerState.Alive;
+
         public bool PlayerEnemyHit(Enemy enemy) {
             if (_sprite.IsCollision(enemy.Ship)) {
                 // player hit, explode
@@ -158,15 +216,17 @@ namespace SpaceDotNet.Components {
             // remove missile
             missile.State = SpriteState.Hidden;
 
-            enemy.Hit(_game.Random.Next(10) + 5);
+            enemy.Hit(_game.Random.Next(10) + _misslePower);
             if (enemy.IsAlive) {
                 ExplodeMissile(missile);
                 Score += 5;
+                Audio.CreateExplosion(0);
             }
             else {
                 ExplodeEnemy(enemy);
                 Score += enemy.Data.Score;
                 _game.Enemies.EnemyDead(enemy);
+                Audio.CreateExplosion(1);
             }
         }
 
@@ -181,7 +241,8 @@ namespace SpaceDotNet.Components {
             exp.ScaleTo(enemy.Ship.Width, true);
         }
 
-        private void ExplodePlayer(GameTime gt) {
+        public void ExplodePlayer(GameTime gt) {
+            Audio.CreateExplosion(1);
             var exp = _game.GetFreeExplostion();
             exp.Position = _sprite.Position;
             exp.HideOnAnimationEnd = true;
@@ -198,6 +259,12 @@ namespace SpaceDotNet.Components {
                 State = PlayerState.Dead;
                 _game.GameOver();
             }
+
+            // remove all powerups
+            _missileSpeedTargetTime = _shieldTargetTime = _playerSpeedTargetTime = TimeSpan.Zero;
+            _shieldActive = false;
+            MissilesPerSecond = 2.3f;
+            _playerSpeed = 250;
         }
 
         private void ExplodeMissile(Sprite missile) {
@@ -223,8 +290,10 @@ namespace SpaceDotNet.Components {
 
         Sprite _sprite;
         Sprite _burner;
-        float _missileSpeed = 600;
-        Sprite[] _missiles = new Sprite[8];
+        Sprite _shield;
+        float _missileSpeed = 500;
+        int _misslePower = 5;
+        Sprite[] _missiles = new Sprite[10];
         SpriteBatch _sb;
         TimeSpan _lastMissileShot;
         Texture2D _missleExplodeTexture;
@@ -233,5 +302,9 @@ namespace SpaceDotNet.Components {
         TimeSpan _respawnTime;
         SpaceDotNetGame _game;
         Texture2D[] _explosionTextures;
+        bool _shieldActive = false;
+        TimeSpan _shieldTargetTime;
+        TimeSpan _missileSpeedTargetTime;
+        TimeSpan _playerSpeedTargetTime;
     }
 }

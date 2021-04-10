@@ -9,10 +9,11 @@
     <Import_RootNamespace>SpaceDotNet</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Audio.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BoundingBox.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\Enemies.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\Player.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\Starfield.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\EnemiesComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\PlayerComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\StarfieldComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LevelData.cs" />
@@ -20,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Objects\Asteroid.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Objects\EnemyData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Objects\Enemy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Objects\Powerups.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpaceDotNetGame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sprite.cs" />
   </ItemGroup>

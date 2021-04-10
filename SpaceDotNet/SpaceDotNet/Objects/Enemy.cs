@@ -20,6 +20,7 @@ namespace SpaceDotNet.Objects {
 
         public void SetPosition(in Vector2 pos) {
             _ship.Position = pos;
+            _exhaust.Position = _ship.Position - new Vector2(_ship.Width / 2.5f * (float)Math.Cos(_ship.Angle), 0);
             _ship.State = SpriteState.Visible;
             _exhaust.State = SpriteState.Visible;
         }

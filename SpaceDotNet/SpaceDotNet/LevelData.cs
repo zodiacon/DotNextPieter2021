@@ -11,5 +11,7 @@ namespace SpaceDotNet {
         public int MaxEnemyShots = 3;
         public float MaxEnemySpeed = 120;
         public int[] EnemiesInRows;
+        public int ShotProb = 5;
+        public float ShotSpeed = 50;
     }
 }

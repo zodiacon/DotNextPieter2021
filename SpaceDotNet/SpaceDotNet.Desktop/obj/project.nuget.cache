@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "4T9wufgC4jfE4aWBS13oLUYPkE5Pr2j9a3qO7/ipiSizFjBoI5UVmiib1jITgRR7hvugW/5u4M+7MO4CB8LjLg==",
+  "success": true,
+  "projectFilePath": "C:\\Dev\\DotNextPiter2021\\DotNextPiter2021\\SpaceDotNet\\SpaceDotNet.Desktop\\SpaceDotNet.Desktop.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\pavel\\.nuget\\packages\\monogame.content.builder.task\\3.8.0.1641\\monogame.content.builder.task.3.8.0.1641.nupkg.sha512",
+    "C:\\Users\\pavel\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.0.1641\\monogame.framework.desktopgl.3.8.0.1641.nupkg.sha512"
+  ],
+  "logs": []
+}
