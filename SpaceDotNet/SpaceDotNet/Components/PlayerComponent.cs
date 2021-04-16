@@ -31,6 +31,9 @@ namespace SpaceDotNet.Components {
         }
 
         protected override void LoadContent() {
+            _pixel = new Texture2D(Game.GraphicsDevice, 1, 1);
+            _pixel.SetData(new[] { Color.White });
+
             var shipTexture = Game.Content.Load<Texture2D>("sprites/player");
             _sprite = new Sprite(shipTexture) {
                 Position = new Vector2(300, 700),
@@ -71,6 +74,18 @@ namespace SpaceDotNet.Components {
             _sprite.Draw(_sb);
             _burner.Draw(_sb);
             _shield.Draw(_sb);
+
+            if (_shieldActive) {
+                // draw shield timer
+                float percent = (float)(_shieldTargetTime - gameTime.TotalGameTime).TotalSeconds / 10;
+                var color = Color.Green;
+                if (percent < .2f)
+                    color = Color.Red;
+                else if (percent < .5f)
+                    color = Color.Yellow;
+                _sb.Draw(_pixel, new Rectangle(400, 20, (int)(100 * percent) * 2, 20), null, color); 
+
+            }
 
             _sb.End();
         }
@@ -113,9 +128,10 @@ namespace SpaceDotNet.Components {
                     _sprite.Update(gameTime);
                     _burner.Update(gameTime);
                     if (_shieldActive) {
-                        _shield.Position = _sprite.Position - new Vector2(0, 30);
-                        var alpha = (float)(gameTime.TotalGameTime.TotalMilliseconds / 10) % 100 / 100.0f;
-                        _shield.Tint = new Color(Color.White, alpha);
+                        _shield.Position = _sprite.Position - new Vector2(0, 40);
+                        var alpha = (byte)(256 * (1 + Math.Cos(gameTime.TotalGameTime.TotalMilliseconds / 200)) / 2);
+                        _shield.Tint = new Color(alpha, alpha, alpha);
+                        Debug.WriteLine($"alpha: {alpha}"); 
                     }
 
                     // update powerups
@@ -216,7 +232,7 @@ namespace SpaceDotNet.Components {
             // remove missile
             missile.State = SpriteState.Hidden;
 
-            enemy.Hit(_game.Random.Next(10) + _misslePower);
+            enemy.Hit(_game.Random.Next(12) + _misslePower + _game.Level);
             if (enemy.IsAlive) {
                 ExplodeMissile(missile);
                 Score += 5;
@@ -249,6 +265,14 @@ namespace SpaceDotNet.Components {
             exp.AnimationFPS = 12;
             exp.ScaleTo(100, true);
             exp.State = SpriteState.Visible;
+
+            // remove shield (if any)
+            if (_shieldActive) {
+                _shieldActive = false;
+                _shieldTargetTime = TimeSpan.Zero;
+                _shield.State = SpriteState.Hidden;
+            }
+
             _sprite.State = SpriteState.Hidden;
             _burner.State = SpriteState.Hidden;
             if (--Lives > 0) {
@@ -302,6 +326,7 @@ namespace SpaceDotNet.Components {
         TimeSpan _respawnTime;
         SpaceDotNetGame _game;
         Texture2D[] _explosionTextures;
+        Texture2D _pixel;
         bool _shieldActive = false;
         TimeSpan _shieldTargetTime;
         TimeSpan _missileSpeedTargetTime;
