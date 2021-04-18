@@ -17,8 +17,8 @@ namespace SpaceDotNet {
     public class SpaceDotNetGame : Game {
         public static SpaceDotNetGame Instance;
         public readonly Random Random = new Random();
-        public readonly int Width = 1080;
-        public readonly int Height = 800;
+        public readonly int Width = 1200;
+        public readonly int Height = 900;
         public int Level { get; private set; } = 1;
         public GameTime GameTime => _gameTime;
 
@@ -181,8 +181,8 @@ namespace SpaceDotNet {
             sb.DrawString(_defaultFont, $"Score: {Player.Score}", new Vector2(120, 20), Color.Yellow);
             sb.DrawString(_defaultFont, $"Ships: {Player.Lives}", new Vector2(270, 20), Color.Magenta);
             if (_state == GameState.Over) {
-                sb.DrawString(_defaultFont, "GAME OVER", new Vector2(210, 300), Color.Red, 0, new Vector2(0, 0), 5, SpriteEffects.None, 0);
-                sb.DrawString(_defaultFont, "GAME OVER", new Vector2(216, 306), Color.LightBlue, 0, new Vector2(0, 0), 5, SpriteEffects.None, 0);
+                sb.DrawString(_defaultFont, "GAME OVER", new Vector2(260, 300), Color.Red, 0, new Vector2(0, 0), 5, SpriteEffects.None, 0);
+                sb.DrawString(_defaultFont, "GAME OVER", new Vector2(266, 306), Color.LightBlue, 0, new Vector2(0, 0), 5, SpriteEffects.None, 0);
             }
         }
 

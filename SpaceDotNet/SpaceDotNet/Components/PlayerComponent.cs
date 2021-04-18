@@ -36,7 +36,7 @@ namespace SpaceDotNet.Components {
 
             var shipTexture = Game.Content.Load<Texture2D>("sprites/player");
             _sprite = new Sprite(shipTexture) {
-                Position = new Vector2(300, 700),
+                Position = new Vector2(500, Game.Window.ClientBounds.Height - 100),
             };
             _sprite.ScaleTo(90);
            
